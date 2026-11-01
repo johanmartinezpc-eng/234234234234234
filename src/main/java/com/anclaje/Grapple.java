@@ -13,8 +13,8 @@ public final class Grapple {
     public static final double STRENGTH = 0.2;
     /** Límite de velocidad añadida por cada jalón. */
     public static final double MAX_IMPULSE = 2.5;
-    /** Desgaste de la caña por cada jalón al endermite (el gancho se queda pegado). */
-    public static final int ANCHOR_DURABILITY_COST = 1;
+    /** Velocidad vertical del gran salto del silverfish (1.2 ≈ 7 bloques de altura). */
+    public static final double SILVERFISH_JUMP = 1.2;
 
     /** Se identifica por id para no depender de las constantes de EntityType. */
     public static boolean isEndermite(Entity e) {
@@ -54,6 +54,14 @@ public final class Grapple {
 
         player.setDeltaMovement(player.getDeltaMovement().add(impulse));
         player.resetFallDistance(); // sin daño de caída tras el impulso
+        player.connection.send(new ClientboundSetEntityMotionPacket(player));
+    }
+
+    /** Gran salto vertical: conserva el movimiento horizontal del jugador. */
+    public static void launchUp(ServerPlayer player) {
+        Vec3 motion = player.getDeltaMovement();
+        player.setDeltaMovement(motion.multiply(1.0, 0.0, 1.0).add(0.0, SILVERFISH_JUMP, 0.0));
+        player.resetFallDistance();
         player.connection.send(new ClientboundSetEntityMotionPacket(player));
     }
 }
