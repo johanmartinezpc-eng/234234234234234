@@ -3,7 +3,6 @@ package com.anclaje.mixin;
 import com.anclaje.Grapple;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +42,7 @@ public abstract class FishingHookMixin {
 
         if (owner instanceof ServerPlayer player
                 && hooked != null
-                && hooked.getType() == EntityType.ENDERMITE
+                && Grapple.isEndermite(hooked)
                 && !player.isShiftKeyDown()) {
             Grapple.pullPlayer(player, hooked);
             cir.setReturnValue(Grapple.ANCHOR_DURABILITY_COST);
