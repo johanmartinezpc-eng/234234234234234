@@ -3,7 +3,6 @@ package com.anclaje;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 
@@ -17,10 +16,18 @@ public final class Grapple {
     /** Desgaste de la caña por cada jalón al endermite (el gancho se queda pegado). */
     public static final int ANCHOR_DURABILITY_COST = 1;
 
+    /** Se identifica por id para no depender de las constantes de EntityType. */
+    public static boolean isEndermite(Entity e) {
+        return "entity.minecraft.endermite".equals(e.getType().getDescriptionId());
+    }
+
+    public static boolean isSilverfish(Entity e) {
+        return "entity.minecraft.silverfish".equals(e.getType().getDescriptionId());
+    }
+
     /** Endermite y silverfish son los mobs que pueden quedar estáticos. */
     public static boolean isFreezable(Entity e) {
-        EntityType<?> t = e.getType();
-        return t == EntityType.ENDERMITE || t == EntityType.SILVERFISH;
+        return isEndermite(e) || isSilverfish(e);
     }
 
     /** Endermite/silverfish sin IA = estático (huevo, /summon, o NoAI:1b). */
